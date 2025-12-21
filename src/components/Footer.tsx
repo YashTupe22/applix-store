@@ -23,7 +23,6 @@ export function Footer() {
             <nav className="space-y-2">
               {[
                 { name: "Products", path: "/products" },
-                { name: "Categories", path: "/categories" },
                 { name: "About", path: "/about" },
                 { name: "Support", path: "/faq" },
               ].map((link) => (
