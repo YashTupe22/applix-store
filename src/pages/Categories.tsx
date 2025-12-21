@@ -44,7 +44,16 @@ function CollectionCard({ collection }: { collection: ShopifyCollection }) {
 export default function Categories() {
   const { data: collections, isLoading, error } = useQuery({
     queryKey: ["collections"],
-    queryFn: () => fetchCollections(20),
+    queryFn: async () => {
+      try {
+        const result = await fetchCollections(20);
+        console.log("Collections fetched:", result);
+        return result;
+      } catch (err) {
+        console.error("Error fetching collections:", err);
+        throw err;
+      }
+    },
   });
 
   return (
@@ -72,8 +81,17 @@ export default function Categories() {
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-12">
-            <p className="text-destructive">Failed to load categories</p>
+          <div className="text-center py-12 space-y-4">
+            <p className="text-destructive font-semibold">Failed to load categories</p>
+            <p className="text-sm text-muted-foreground">
+              {error instanceof Error ? error.message : "Unknown error occurred"}
+            </p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            >
+              Retry
+            </button>
           </div>
         ) : collections && collections.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
