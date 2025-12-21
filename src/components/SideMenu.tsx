@@ -10,7 +10,6 @@ interface SideMenuProps {
 const menuItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/products", label: "Products", icon: Package },
-  { href: "/categories", label: "Categories", icon: Grid3X3 },
   { href: "/about", label: "About", icon: Info },
   { href: "/faq", label: "FAQ", icon: HelpCircle },
   { href: "/contact", label: "Contact", icon: Mail },
