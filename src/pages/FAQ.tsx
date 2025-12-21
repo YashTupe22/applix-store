@@ -18,11 +18,6 @@ const FAQ = () => {
             "Standard shipping typically takes 5-7 business days. Express shipping is available for 2-3 business days delivery. You'll receive tracking information via email once your order ships.",
         },
         {
-          question: "Do you ship internationally?",
-          answer:
-            "Yes, we ship to over 50 countries worldwide. International shipping rates and delivery times vary by location. You can check shipping costs at checkout.",
-        },
-        {
           question: "Can I cancel or modify my order?",
           answer:
             "Orders can be cancelled or modified within 1 hour of placement. After that, orders move to processing and cannot be changed. Contact our support team immediately if you need assistance.",
@@ -30,7 +25,7 @@ const FAQ = () => {
         {
           question: "Is there free shipping?",
           answer:
-            "Free shipping is available on orders over $150. For orders under this amount, shipping costs are calculated based on weight and destination.",
+            "Free shipping is available on orders over ₹499. For orders under this amount, shipping costs are calculated based on weight and destination.",
         },
       ],
     },
@@ -40,12 +35,12 @@ const FAQ = () => {
         {
           question: "What is your return policy?",
           answer:
-            "We offer a 30-day return policy for most items in their original condition. Products must be unused with original packaging. Some items like clearance products are final sale.",
+            "We offer a 7-day return policy for most items in their original condition. Products must be unused with original packaging. Some items like clearance products are final sale.",
         },
         {
           question: "How do I initiate a return?",
           answer:
-            "Visit your account dashboard and select the order you want to return. Click 'Return Item' and follow the instructions. You'll receive a prepaid return label via email.",
+            "",
         },
         {
           question: "How long do refunds take?",
@@ -55,22 +50,17 @@ const FAQ = () => {
         {
           question: "Can I return an item if I changed my mind?",
           answer:
-            "Yes, as long as the item is unused and in original condition with packaging, it qualifies for return within 30 days of purchase.",
+            "Yes, as long as the item is unused and in original condition with packaging, for some orders there would be a charge of ₹50 to ₹100.",
         },
       ],
     },
     {
       category: "Products",
-      items: [
-        {
-          question: "Are your products covered by warranty?",
-          answer:
-            "Most products come with a manufacturer's warranty ranging from 1-3 years depending on the item. Details are provided in the product information. Extended warranties are available at checkout.",
-        },
+      items: [       
         {
           question: "Do you have stock availability information?",
           answer:
-            "Yes, stock status is shown on each product page. Items marked 'In Stock' ship within 2 business days. Pre-order items have estimated delivery dates.",
+            "Yes, stock status is shown on each product page. Items marked 'In Stock' ship within 5-7 business days. Pre-order items have estimated delivery dates.",
         },
         {
           question: "Are there bulk discounts available?",
@@ -90,23 +80,9 @@ const FAQ = () => {
         {
           question: "What payment methods do you accept?",
           answer:
-            "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Google Pay, and Apple Pay. Installment payment options are available for orders over $500.",
+            "We accept Cash on Delivery, all major credit cards (Visa, Mastercard, American Express),Upi, PayPal, Google Pay, and Apple Pay. Installment payment options are available for orders over $500.",
         },
-        {
-          question: "Is my payment information secure?",
-          answer:
-            "Yes, we use industry-leading SSL encryption to protect your payment data. Your information is never stored on our servers after transaction completion.",
-        },
-        {
-          question: "Can I create a wishlist?",
-          answer:
-            "Yes, create an account and click the heart icon on products to add them to your wishlist. You can share wishlists with friends and receive price drop notifications.",
-        },
-        {
-          question: "How do I reset my password?",
-          answer:
-            "Click 'Forgot Password' on the login page and enter your email. You'll receive a password reset link valid for 24 hours.",
-        },
+
       ],
     },
     {
@@ -132,21 +108,13 @@ const FAQ = () => {
     {
       category: "Delivery & Installation",
       items: [
-        {
-          question: "Do you offer installation services?",
-          answer:
-            "Installation services are available for major appliances. You can add installation to your order during checkout. A technician will contact you to schedule an appointment.",
-        },
+       
         {
           question: "What happens if my product arrives damaged?",
           answer:
             "Document the damage with photos and contact us within 48 hours of delivery. We'll arrange a replacement or refund immediately at no cost to you.",
         },
-        {
-          question: "Can I schedule a specific delivery time?",
-          answer:
-            "Yes, during checkout you can select your preferred delivery date and time window. You'll receive email reminders with the exact delivery window.",
-        },
+       
       ],
     },
   ];
@@ -216,3 +184,4 @@ const FAQ = () => {
 };
 
 export default FAQ;
+
