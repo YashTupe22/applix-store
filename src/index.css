@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Applix Design System
+   Brand: Home Appliances & Home Décor
+   Palette: Oat White #F5F1EA, Midnight Blue #0B1C2D
+*/
+
+@layer base {
+  :root {
+    /* Oat White - Primary Background */
+    --background: 36 33% 94%;
+    --foreground: 207 58% 11%;
+
+    /* Card surfaces - slightly warmer than background */
+    --card: 36 30% 96%;
+    --card-foreground: 207 58% 11%;
+
+    --popover: 36 30% 96%;
+    --popover-foreground: 207 58% 11%;
+
+    /* Midnight Blue - Primary Brand Color */
+    --primary: 207 58% 11%;
+    --primary-foreground: 36 33% 94%;
+
+    /* Secondary - Soft Midnight */
+    --secondary: 207 30% 25%;
+    --secondary-foreground: 36 33% 94%;
+
+    /* Muted tones */
+    --muted: 36 20% 88%;
+    --muted-foreground: 207 20% 40%;
+
+    /* Accent - Warm complement */
+    --accent: 30 30% 85%;
+    --accent-foreground: 207 58% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 36 33% 94%;
+
+    --border: 36 20% 85%;
+    --input: 36 20% 88%;
+    --ring: 207 58% 11%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar-background: 207 58% 11%;
+    --sidebar-foreground: 36 33% 94%;
+    --sidebar-primary: 36 33% 94%;
+    --sidebar-primary-foreground: 207 58% 11%;
+    --sidebar-accent: 207 40% 18%;
+    --sidebar-accent-foreground: 36 33% 94%;
+    --sidebar-border: 207 40% 18%;
+    --sidebar-ring: 36 33% 94%;
+
+    /* Custom tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(207 58% 11%) 0%, hsl(207 45% 18%) 100%);
+    --shadow-elegant: 0 4px 20px -4px hsl(207 58% 11% / 0.15);
+    --shadow-card: 0 2px 12px -2px hsl(207 58% 11% / 0.08);
+  }
+
+  .dark {
+    --background: 207 58% 8%;
+    --foreground: 36 33% 94%;
+
+    --card: 207 45% 12%;
+    --card-foreground: 36 33% 94%;
+
+    --popover: 207 45% 12%;
+    --popover-foreground: 36 33% 94%;
+
+    --primary: 36 33% 94%;
+    --primary-foreground: 207 58% 11%;
+
+    --secondary: 207 30% 20%;
+    --secondary-foreground: 36 33% 94%;
+
+    --muted: 207 30% 18%;
+    --muted-foreground: 36 20% 70%;
+
+    --accent: 207 30% 22%;
+    --accent-foreground: 36 33% 94%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 36 33% 94%;
+
+    --border: 207 30% 20%;
+    --input: 207 30% 20%;
+    --ring: 36 33% 94%;
+
+    --sidebar-background: 207 58% 6%;
+    --sidebar-foreground: 36 33% 94%;
+    --sidebar-primary: 36 33% 94%;
+    --sidebar-primary-foreground: 207 58% 11%;
+    --sidebar-accent: 207 40% 15%;
+    --sidebar-accent-foreground: 36 33% 94%;
+    --sidebar-border: 207 40% 15%;
+    --sidebar-ring: 36 33% 94%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background: var(--hero-gradient);
+  }
+
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
