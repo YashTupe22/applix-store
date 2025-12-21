@@ -7,71 +7,94 @@ const About = () => {
     {
       title: "Quality",
       description:
-        "We only stock premium appliances from trusted manufacturers that meet our rigorous quality standards.",
+        "Products selected based on utility, quality standards, and customer demand from verified manufacturers.",
     },
     {
-      title: "Innovation",
+      title: "Transparency",
       description:
-        "We stay ahead of the curve, bringing the latest smart home technology and energy-efficient solutions to our customers.",
+        "Clear dropshipping operations with verified manufacturers and logistics partners for competitive pricing.",
     },
     {
-      title: "Customer Service",
+      title: "Customer First",
       description:
-        "Your satisfaction is our priority. We provide expert guidance and responsive support before, during, and after your purchase.",
+        "Responsive support, secure payments, and structured return policies ensure peace of mind.",
     },
     {
-      title: "Sustainability",
+      title: "Efficiency",
       description:
-        "We promote energy-efficient products and sustainable practices to help reduce environmental impact.",
+        "Smart, reliable appliances that enhance convenience and improve daily life through practical innovation.",
     },
   ];
 
   const stats = [
-    { number: "50K+", label: "Happy Customers" },
-    { number: "10K+", label: "Products Available" },
-    { number: "15+", label: "Years in Business" },
-    { number: "98%", label: "Customer Satisfaction" },
+    { number: "Smart", label: "Everyday Appliances" },
+    { number: "Direct", label: "From Manufacturers" },
+    { number: "Fast", label: "Nationwide Delivery" },
+    { number: "Secure", label: "Payment & Support" },
   ];
 
   return (
     <Layout>
       <div className="min-h-screen bg-background">
-        {/* Hero Section */}
-        <div className="bg-card border-b border-border py-12 px-4">
-          <div className="container max-w-3xl">
-            <h1 className="text-4xl font-heading font-bold text-foreground mb-4">
-              About Applix
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Transforming homes with premium appliances and modern living solutions since 2009.
-            </p>
+        {/* Hero Section with Gradient */}
+        <div className="hero-gradient py-16 md:py-20 px-4 relative overflow-hidden">
+          {/* Subtle pattern overlay */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--primary-foreground)) 1px, transparent 0)`,
+              backgroundSize: '40px 40px'
+            }} />
           </div>
+
+          <div className="container max-w-4xl relative z-10">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary-foreground mb-6 text-center">
+              About Us
+            </h1>
+            <p className="text-lg md:text-xl text-primary-foreground/90 text-center leading-relaxed max-w-3xl mx-auto mb-8">
+              "Applix is built on the principle of simplifying access to modern gadgets through transparent dropshipping operations, dependable suppliers, and customer-first service policies."
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a
+                href="#mission"
+                className="px-6 py-2 bg-background text-foreground rounded-md hover:bg-background/90 transition-colors font-medium"
+              >
+                Discover more
+              </a>
+              <a
+                href="/contact"
+                className="px-6 py-2 bg-transparent border-2 border-primary-foreground text-primary-foreground rounded-md hover:bg-primary-foreground/10 transition-colors font-medium"
+              >
+                Contact us
+              </a>
+            </div>
+          </div>
+
+          {/* Decorative bottom gradient */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
         </div>
 
         {/* Main Content */}
         <div className="container max-w-4xl py-12 px-4">
-          {/* Our Story */}
-          <section className="mb-16">
+          {/* Our Mission */}
+          <section id="mission" className="mb-16">
             <h2 className="text-3xl font-heading font-bold text-foreground mb-6">
-              Our Story
+              Our Mission
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
-                Founded in 2009, Applix was born from a simple idea: to make premium home
-                appliances and décor accessible to everyone. What started as a small showroom
-                has grown into one of the leading online retailers for home appliances, serving
-                customers across the globe.
+                <strong className="text-foreground">Applix</strong> is a modern dropshipping brand dedicated to making smart, reliable, and affordable home solutions accessible to everyone. We specialize in <strong className="text-foreground">small home electronic appliances, kitchen gadgets, and cleaning appliances</strong> that simplify daily life through practical innovation and dependable performance.
               </p>
               <p>
-                We believe that a well-appointed home should be attainable for everyone. That's
-                why we carefully curate our selection, partner with trusted manufacturers, and
-                maintain competitive pricing without compromising on quality.
+                Our business model allows us to work directly with <strong className="text-foreground">verified manufacturers and logistics partners</strong>, enabling us to offer competitive pricing, trend-driven products, and nationwide delivery without the overhead of traditional warehousing. Every product listed on Applix is selected based on <strong className="text-foreground">utility, quality standards, and customer demand</strong>.
               </p>
               <p>
-                Today, Applix continues to evolve, embracing the latest technology and
-                sustainable practices to meet the changing needs of modern homeowners. Whether
-                you're furnishing your first apartment or upgrading your kitchen, we're here to
-                help you create the home of your dreams.
+                At Applix, we believe technology should not feel complicated—it should feel <strong className="text-foreground">useful, efficient, and trustworthy</strong>. That is why our focus goes beyond selling products. We prioritize <strong className="text-foreground">transparent operations, secure payments, responsive customer support, and structured return policies</strong> to ensure complete peace of mind for our customers.
+              </p>
+              <p className="font-medium text-foreground">
+                As a customer-first brand, our mission is simple:
+              </p>
+              <p className="font-semibold text-foreground text-lg">
+                to deliver smart everyday appliances that enhance convenience, improve efficiency, and elevate modern living.
               </p>
             </div>
           </section>
