@@ -217,7 +217,7 @@ const Contact = () => {
               Looking for quick answers?
             </p>
             <a
-              href="/FAQ.tsx"
+              href="/faq"
               className="inline-block px-6 py-2 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors"
             >
               Visit our FAQ
@@ -230,4 +230,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
 
