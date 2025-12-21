@@ -6,8 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import Categories from "./pages/Categories";
-import CategoryDetail from "./pages/CategoryDetail";
 import NotFound from "./pages/NotFound";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
@@ -26,8 +24,6 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/category/:handle" element={<CategoryDetail />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
