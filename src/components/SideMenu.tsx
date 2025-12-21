@@ -1,4 +1,4 @@
-import { X, Home, Package, Grid3X3, HelpCircle, Mail, Info, Truck } from "lucide-react";
+import { X, Home, Package, HelpCircle, Mail, Info, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
