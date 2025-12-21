@@ -8,20 +8,20 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "support@applix.com",
+      content: "Info.Applixstore@protonmail.com",
       subtext: "Response time: within 24 hours",
     },
     {
       icon: Phone,
       title: "Phone",
-      content: "+1 (555) 123-4567",
+      content: "+91 8668918164",
       subtext: "Monday - Friday, 9AM - 6PM EST",
     },
     {
       icon: MapPin,
       title: "Address",
-      content: "123 Tech Boulevard",
-      subtext: "San Francisco, CA 94105",
+      content: "PCMC,Pune",
+      subtext: "Maharashtra, IN 412105",
     },
     {
       icon: Clock,
