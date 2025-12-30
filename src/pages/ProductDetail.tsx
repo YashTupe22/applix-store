@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
@@ -20,9 +22,14 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
-  
-  const addItem = useCartStore((state) => state.addItem);
-  const setCartOpen = useCartStore((state) => state.setOpen);
+
+  const {
+    addItem,
+    setOpen: setCartOpen,
+    createCheckout,
+    createShiprocketCheckout,
+    setPaymentMode,
+  } = useCartStore();
 
   useEffect(() => {
     async function loadProduct() {
@@ -46,7 +53,7 @@ export default function ProductDetail() {
     (v) => v.node.id === selectedVariant
   )?.node;
 
-  const handleAddToCart = () => {
+  const addCurrentItemToCart = () => {
     if (!product || !currentVariant) return;
 
     const cartItem: CartItem = {
@@ -59,13 +66,32 @@ export default function ProductDetail() {
     };
 
     addItem(cartItem);
+    return cartItem;
+  };
+
+  const handleAddToCart = () => {
+    addCurrentItemToCart();
     toast.success("Added to cart", {
-      description: `${quantity}x ${product.title}`,
+      description: `${quantity}x ${product?.title}`,
       action: {
         label: "View Cart",
         onClick: () => setCartOpen(true),
       },
     });
+  };
+
+  const handlePayOnline = () => {
+    if (!currentVariant?.availableForSale) return;
+    addCurrentItemToCart();
+    setPaymentMode('PREPAID');
+    createCheckout();
+  };
+
+  const handleCODCheckout = () => {
+    if (!currentVariant?.availableForSale) return;
+    addCurrentItemToCart();
+    setPaymentMode('COD');
+    createShiprocketCheckout();
   };
 
   if (loading) {
@@ -82,7 +108,9 @@ export default function ProductDetail() {
     return (
       <Layout>
         <div className="container py-12 text-center">
-          <h1 className="text-2xl font-heading font-semibold mb-4">Product not found</h1>
+          <h1 className="text-2xl font-heading font-semibold mb-4">
+            Product not found
+          </h1>
           <Link to="/">
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -96,189 +124,89 @@ export default function ProductDetail() {
 
   const images = product.images.edges;
 
-  // Parse description into structured sections if possible
-  const parseDescription = (desc: string) => {
-    const sections: { label: string; value: string }[] = [];
-    
-    // Common patterns in product descriptions
-    const patterns = [
-      { key: 'Product Name:', label: 'Product Name' },
-      { key: 'Package Contains:', label: 'Package Contents' },
-      { key: 'Material:', label: 'Material' },
-      { key: 'Color:', label: 'Color' },
-      { key: 'Combo:', label: 'Package' },
-      { key: 'LBH:', label: 'Dimensions' },
-      { key: 'Weight:', label: 'Weight' },
-      { key: 'Product Dimension:', label: 'Dimensions' },
-    ];
-
-    let remainingDesc = desc;
-    patterns.forEach(({ key, label }) => {
-      const idx = remainingDesc.indexOf(key);
-      if (idx !== -1) {
-        const nextKeyIdx = patterns
-          .map(p => remainingDesc.indexOf(p.key, idx + key.length))
-          .filter(i => i > idx)
-          .sort((a, b) => a - b)[0] || remainingDesc.length;
-        
-        const value = remainingDesc.substring(idx + key.length, nextKeyIdx).trim();
-        if (value) {
-          sections.push({ label, value });
-        }
-      }
-    });
-
-    return sections;
-  };
-
-  const descriptionSections = product.description ? parseDescription(product.description) : [];
-
   return (
     <Layout>
       <div className="container py-8">
-        {/* Breadcrumb */}
-        <Link 
-          to="/products" 
-          className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6 transition-colors text-sm"
+        <Link
+          to="/products"
+          className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6 text-sm"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to products
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          {/* Images */}
           <ProductImageGallery images={images} productTitle={product.title} />
 
-          {/* Details */}
           <div className="space-y-6">
-            {/* Title and Wishlist */}
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl md:text-3xl font-heading font-semibold text-foreground">
+                <h1 className="text-2xl md:text-3xl font-semibold">
                   {product.title}
                 </h1>
-                <p className="text-xl md:text-2xl font-bold text-foreground mt-2">
-                  {currentVariant?.price.currencyCode}{' '}
-                  {parseFloat(currentVariant?.price.amount || '0').toFixed(2)}
+                <p className="text-xl md:text-2xl font-bold mt-2">
+                  {currentVariant?.price.currencyCode}{" "}
+                  {parseFloat(currentVariant?.price.amount || "0").toFixed(2)}
                 </p>
               </div>
-              <Button variant="ghost" size="icon" className="flex-shrink-0">
+              <Button variant="ghost" size="icon">
                 <Heart className="h-5 w-5" />
               </Button>
             </div>
 
-            {/* Variants */}
-            {product.options && product.options.length > 0 && product.options[0].name !== "Title" && (
-              <div className="space-y-4">
-                {product.options.map((option) => (
-                  <div key={option.name}>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      {option.name}
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {option.values.map((value) => {
-                        const variant = product.variants.edges.find((v) =>
-                          v.node.selectedOptions.some(
-                            (opt) => opt.name === option.name && opt.value === value
-                          )
-                        );
-                        const isSelected = variant?.node.id === selectedVariant;
-                        
-                        return (
-                          <Button
-                            key={value}
-                            variant={isSelected ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => variant && setSelectedVariant(variant.node.id)}
-                          >
-                            {value}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Quantity and Add to Cart */}
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Quantity
-                </label>
-                <div className="flex items-center">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-r-none h-11 w-11"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <div className="h-11 w-14 flex items-center justify-center border-y border-border bg-background">
-                    <span className="font-medium">{quantity}</span>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-l-none h-11 w-11"
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+              <label className="block text-sm font-medium">Quantity</label>
+              <div className="flex items-center">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <div className="px-4 font-medium">{quantity}</div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setQuantity(quantity + 1)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
               </div>
 
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="w-full h-12"
+                className="w-full"
                 disabled={!currentVariant?.availableForSale}
               >
-                <Plus className="mr-2 h-5 w-5" />
-                {currentVariant?.availableForSale ? "Add to Cart" : "Out of Stock"}
+                Add to Cart
+              </Button>
+
+              <Button
+                onClick={handlePayOnline}
+                size="lg"
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={!currentVariant?.availableForSale}
+              >
+                Pay Online
+              </Button>
+
+              <Button
+                onClick={handleCODCheckout}
+                size="lg"
+                className="w-full bg-black hover:bg-black/90"
+                disabled={!currentVariant?.availableForSale}
+              >
+                Buy Now – Cash on Delivery
               </Button>
             </div>
 
-            {/* Accordion Sections */}
-            <Accordion type="single" collapsible className="w-full border-t border-border pt-4">
-              <AccordionItem value="description" className="border-b border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-wide hover:no-underline py-4">
-                  Description
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed pb-4">
+            <Accordion type="single" collapsible>
+              <AccordionItem value="description">
+                <AccordionTrigger>Description</AccordionTrigger>
+                <AccordionContent>
                   {product.description || "No description available."}
-                </AccordionContent>
-              </AccordionItem>
-
-              {descriptionSections.length > 0 && (
-                <AccordionItem value="details" className="border-b border-border">
-                  <AccordionTrigger className="text-sm font-medium uppercase tracking-wide hover:no-underline py-4">
-                    Product Details
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-4">
-                    <dl className="space-y-2">
-                      {descriptionSections.map((section, idx) => (
-                        <div key={idx} className="flex gap-2">
-                          <dt className="text-muted-foreground font-medium min-w-[120px]">
-                            {section.label}:
-                          </dt>
-                          <dd className="text-foreground">{section.value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </AccordionContent>
-                </AccordionItem>
-              )}
-
-              <AccordionItem value="shipping" className="border-b border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-wide hover:no-underline py-4">
-                  Shipping & Returns
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed pb-4">
-                  <p className="mb-2">Free shipping on orders over ₹999.</p>
-                  <p>Returns accepted within 7 days of delivery. Items must be unused and in original packaging.</p>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
