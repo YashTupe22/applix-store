@@ -1,58 +1,70 @@
 import { NextResponse } from "next/server";
-import { getShiprocketToken } from "@/lib/shiprocket";
+import crypto from "crypto";
+
+/**
+ * Shiprocket Webhook Receiver
+ * Endpoint: /api/webhooks/shiprocket
+ */
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    // Read raw body for signature verification
+    const rawBody = await req.text();
+    const receivedSignature = req.headers.get("x-shiprocket-signature");
 
-    // Basic validation
-    if (!body || !body.items || body.items.length === 0) {
-      return NextResponse.json(
-        { error: "Invalid checkout payload" },
-        { status: 400 }
-      );
-    }
+    /* ---------- SIGNATURE VERIFICATION ---------- */
+    if (process.env.SHIPROCKET_WEBHOOK_SECRET && receivedSignature) {
+      const expectedSignature = crypto
+        .createHmac("sha256", process.env.SHIPROCKET_WEBHOOK_SECRET)
+        .update(rawBody)
+        .digest("hex");
 
-    const token = await getShiprocketToken();
-
-    const shiprocketRes = await fetch(
-      "https://apiv2.shiprocket.in/v1/external/checkout",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          payment_method: "COD",
-          items: body.items,
-          customer: body.customer, // optional but recommended
-          billing_address: body.billing_address,
-          shipping_address: body.shipping_address,
-          callback_url:
-            process.env.SHIPROCKET_CALLBACK_URL ||
-            "https://applixstore.vercel.app/order/success",
-        }),
+      if (receivedSignature !== expectedSignature) {
+        console.error("Invalid Shiprocket webhook signature");
+        return NextResponse.json(
+          { error: "Invalid signature" },
+          { status: 401 }
+        );
       }
-    );
-
-    const data = await shiprocketRes.json();
-
-    if (!shiprocketRes.ok || !data.checkout_url) {
-      console.error("Shiprocket error:", data);
-      return NextResponse.json(
-        { error: "Shiprocket checkout failed", details: data },
-        { status: 400 }
-      );
     }
 
-    return NextResponse.json({
-      checkoutUrl: data.checkout_url,
-    });
+    const payload = JSON.parse(rawBody);
+
+    /* ---------- LOG FOR DEBUG (SAFE) ---------- */
+    console.log("Shiprocket webhook received:", payload.event);
+
+    /* ---------- HANDLE EVENTS ---------- */
+    switch (payload.event) {
+      case "checkout.order.created":
+        console.log("Order created:", payload.data?.order_id);
+        break;
+
+      case "checkout.payment.success":
+        console.log("Payment success:", payload.data?.order_id);
+        break;
+
+      case "checkout.payment.failed":
+        console.log("Payment failed:", payload.data?.order_id);
+        break;
+
+      case "shipment.created":
+        console.log("Shipment created:", payload.data?.awb);
+        break;
+
+      case "order.cancelled":
+        console.log("Order cancelled:", payload.data?.order_id);
+        break;
+
+      default:
+        console.log("Unhandled Shiprocket event:", payload.event);
+    }
+
+    /* ---------- ACKNOWLEDGE WEBHOOK ---------- */
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Checkout API error:", error);
+    console.error("Shiprocket webhook error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Webhook processing failed" },
       { status: 500 }
     );
   }
