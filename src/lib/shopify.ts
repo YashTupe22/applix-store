@@ -379,3 +379,32 @@ export async function createStorefrontCheckout(items: Array<{ variantId: string;
   
   return checkoutUrl;
 }
+export async function createShopifyOrder(order: any) {
+  await fetch(
+    `https://${process.env.SHOPIFY_STORE}.myshopify.com/admin/api/2024-01/orders.json`,
+    {
+      method: "POST",
+      headers: {
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_TOKEN!,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        order: {
+          line_items: order.items.map((i: any) => ({
+            title: i.name,
+            price: i.selling_price,
+            quantity: i.quantity,
+          })),
+          customer: {
+            email: order.customer.email,
+            phone: order.customer.phone,
+          },
+          shipping_address: order.address,
+          financial_status: "pending",
+          tags: ["shiprocket"],
+        },
+      }),
+    }
+  );
+}
+
